@@ -16,7 +16,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Pane base = new Pane(); //fxmlloader.load();
-        Scene scene = new Scene(base, 320, 240);
+        Scene scene = new Scene(base, 420, 440);
 
         Rectangle bar = new Rectangle(30, 20, Color.AZURE);
         base.getChildren().add(bar);
