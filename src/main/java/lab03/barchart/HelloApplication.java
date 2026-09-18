@@ -10,11 +10,15 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 //import java.awt.Color;
 
 public class HelloApplication extends Application {
-    Rectangle bar1, bar2, bar3;//, top, bottom, sideR, sideL;
+    static final int NUM_BARS = 12;
+    List<Rectangle> bars = new ArrayList<>();
+    Pane base;
     Random rand;
 
     Color[] colors = { Color.BLUE, Color.PURPLE, Color.HOTPINK, Color.GREEN, Color.ORANGE,
@@ -23,7 +27,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Pane base = new Pane(); //fxmlloader.load();
+        base = new Pane(); //fxmlloader.load();
         Scene scene = new Scene(base, 420, 440);
 
         rand = new Random();
@@ -57,14 +61,6 @@ public class HelloApplication extends Application {
         sideL.setLayoutX(60);
         sideR.setLayoutY(100);
         */
-        bar1 = new Rectangle(10, rand.nextInt(350)+1, Color.BLUE);
-        base.getChildren().add(bar1);
-
-        bar2 = new Rectangle(10, rand.nextInt(350)+1, Color.PURPLE);
-        base.getChildren().add(bar2);
-
-        bar3 = new Rectangle(10, rand.nextInt(350)+1, Color.HOTPINK);
-        base.getChildren().add(bar3);
 
         Button redraw = new Button();
         redraw.setText("Redraw");
@@ -85,23 +81,32 @@ public class HelloApplication extends Application {
     Random random = new Random();
     Random randHeight = new Random();
     void onRedraw(){
-        //Set them at least 20 spaces from each other - X Values
-        //Blue
-        bar1.setLayoutX(150);
-        bar1.setHeight(randHeight.nextDouble(350)+1);
-        bar1.setFill(colors[random.nextInt(colors.length)]);
-        //Purple
-        bar2.setLayoutX(170);
-        bar2.setHeight(randHeight.nextDouble(350)+1);
-        bar2.setFill(colors[random.nextInt(colors.length)]);
+      base.getChildren().removeAll(bars);
+      bars.clear();
 
-        //Pink
-        bar3.setLayoutX(190);
-        bar3.setHeight(randHeight.nextDouble(350)+1);
-        bar3.setFill(colors[random.nextInt(colors.length)]);
+      int spacing = 20;
+      int barWidth = 10;
+      int windowWidth = 420;
+
+      int groupWidth = (NUM_BARS - 1) * spacing + barWidth;
+
+      int startX = (windowWidth - groupWidth) / 2;
+
+    for (int i = 0; i< NUM_BARS; i++) {
+        bars.add(createBar(startX + i * spacing));
+        }
+    base.getChildren().addAll(bars);
+    }
+
+    Rectangle createBar(int xPosition) {
+        Rectangle bar = new Rectangle(10, randHeight.nextDouble(350)+1);
+        bar.setFill(colors[random.nextInt(colors.length)]);
+        bar.setLayoutX(xPosition);
+                return bar;
     }
 
     public static void main(String[] args) {
+
         launch();
     }
 }
