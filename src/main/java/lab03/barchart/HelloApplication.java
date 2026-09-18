@@ -16,6 +16,10 @@ import java.util.Random;
 public class HelloApplication extends Application {
     Rectangle bar1, bar2, bar3;//, top, bottom, sideR, sideL;
     Random rand;
+
+    Color[] colors = { Color.BLUE, Color.PURPLE, Color.HOTPINK, Color.GREEN, Color.ORANGE,
+            Color.RED, Color.CYAN, Color.GRAY};
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
@@ -85,12 +89,16 @@ public class HelloApplication extends Application {
         //Blue
         bar1.setLayoutX(150);
         bar1.setHeight(randHeight.nextDouble(350)+1);
+        bar1.setFill(colors[random.nextInt(colors.length)]);
         //Purple
         bar2.setLayoutX(170);
         bar2.setHeight(randHeight.nextDouble(350)+1);
+        bar2.setFill(colors[random.nextInt(colors.length)]);
+
         //Pink
         bar3.setLayoutX(190);
         bar3.setHeight(randHeight.nextDouble(350)+1);
+        bar3.setFill(colors[random.nextInt(colors.length)]);
     }
 
     public static void main(String[] args) {
