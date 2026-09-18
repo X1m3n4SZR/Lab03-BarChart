@@ -8,6 +8,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.scene.shape.Line;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,12 +26,22 @@ public class HelloApplication extends Application {
     Color[] colors = { Color.BLUE, Color.PURPLE, Color.HOTPINK, Color.GREEN, Color.ORANGE,
             Color.RED, Color.CYAN, Color.GRAY};
 
+    // Grid Boundaries
+    static final int GRID_LEFT=40;
+    static final int GRID_SIZE=300; // 300px tall so each grid space is 30px
+    static final int GRID_BOTTOM = 370;
+    static final int GRID_TOP = GRID_BOTTOM - GRID_SIZE;
+    static final int CELL_SIZE=GRID_SIZE/10;
+
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         base = new Pane(); //fxmlloader.load();
+        base = new Pane();
+        base.setStyle("-fx-background-color: #D3D3D3;"); // set background color
         Scene scene = new Scene(base, 420, 440);
-
+        drawGrid();
         rand = new Random();
         /*
         //Idea for random color, but doesn't work because conflicts with other Color import
@@ -75,11 +87,28 @@ public class HelloApplication extends Application {
 
         stage.setTitle("Lab03: Bar Chart");
         stage.setScene(scene);
+        stage.setResizable(false); // attempt to center graph
         stage.show();
     }
 
     Random random = new Random();
     Random randHeight = new Random();
+
+    void drawGrid(){
+        for (int col=0 ; col<=10; col++){
+        int x = GRID_LEFT + col * CELL_SIZE;
+        Line line = new Line(x,GRID_TOP,x,GRID_TOP + GRID_SIZE);
+        line.setStroke(Color.BLACK);
+        base.getChildren().add(line);
+        }
+        for (int row=0 ; row<=10; row++){
+            int y = GRID_TOP + row * CELL_SIZE;
+            Line line = new Line(GRID_LEFT,y,GRID_LEFT + GRID_SIZE,y);
+            line.setStroke(Color.BLACK);
+            base.getChildren().add(line);
+        }
+    }
+
     void onRedraw(){
       base.getChildren().removeAll(bars);
       bars.clear();
@@ -99,9 +128,11 @@ public class HelloApplication extends Application {
     }
 
     Rectangle createBar(int xPosition) {
-        Rectangle bar = new Rectangle(10, randHeight.nextDouble(350)+1);
+        double height = randHeight.nextDouble(GRID_SIZE - 10) + 1;
+        Rectangle bar = new Rectangle(10, height);
         bar.setFill(colors[random.nextInt(colors.length)]);
         bar.setLayoutX(xPosition);
+        bar.setY(GRID_BOTTOM - height); // set the bars to start at bottom of graph
                 return bar;
     }
 
